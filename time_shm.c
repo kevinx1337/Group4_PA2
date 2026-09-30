@@ -15,6 +15,7 @@
 #define SHARED_MAP_ANONYMOUS MAP_ANON
 #endif
 
+/* Measures and prints the elapsed time from the child's start timestamp. */
 static void report_elapsed_time(const struct timeval *start)
 {
     struct timeval end;
@@ -33,6 +34,7 @@ static void report_elapsed_time(const struct timeval *start)
     printf("Elapsed time: %.6f seconds\n", elapsed);
 }
 
+/* Shares a start timestamp with a child, executes its command, then cleans up. */
 int main(int argc, char *argv[])
 {
     if (argc < 2) {
