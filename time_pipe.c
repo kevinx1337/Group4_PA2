@@ -70,6 +70,15 @@ int main(int argc, char *argv[]){
 
 //person 4 (get start timestamp, close pipe end, get end timestamp, timing calc, output)
 
+      if (read(pipe_fd[0], &start_time, sizeof(struct timeval)) != sizeof(struct timeval)) {
+        perror("Read from pipe failed");
+        close(pipe_fd[0]);
+        return 1;}
+
+      close(pipe_fd[0]); //done reading, close the read end
+
+      report_elapsed_time(&start_time);
+
   return 0;
 }
   
