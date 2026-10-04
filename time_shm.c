@@ -16,31 +16,36 @@
 #endif
 
 /* Measures and prints the elapsed time from the child's start timestamp. */
-static void report_elapsed_time(const struct timeval *start)
+static int report_elapsed_time(const struct timeval *start)
 {
     struct timeval end;
 
     if (start->tv_sec < 0) {
-        return;
+        fprintf(stderr, "shared memory: missing start timestamp\n");
+        return -1;
     }
 
     if (gettimeofday(&end, NULL) == -1) {
         perror("gettimeofday");
-        return;
+        return -1;
     }
 
     double elapsed = (double)(end.tv_sec - start->tv_sec) +
                      (double)(end.tv_usec - start->tv_usec) / 1000000.0;
     printf("Elapsed time: %.6f seconds\n", elapsed);
+    return 0;
 }
 
 /* Shares a start timestamp with a child, executes its command, then cleans up. */
 int main(int argc, char *argv[])
 {
     if (argc < 2) {
-        fprintf(stderr, "Usage: %s command [args...]\n", argv[0]);
+        fprintf(stderr, "Usage: %s <command> [args...]\n", argv[0]);
         return EXIT_FAILURE;
     }
+
+    /* main's argv is NULL-terminated, so argv + 1 is ready for execvp. */
+    char **command_argv = argv + 1;
 
     struct timeval *start = mmap(NULL, sizeof(*start), PROT_READ | PROT_WRITE,
                                  MAP_SHARED | SHARED_MAP_ANONYMOUS, -1, 0);
@@ -67,7 +72,7 @@ int main(int argc, char *argv[])
         }
         *start = child_start;
 
-        execvp(argv[1], &argv[1]);
+        execvp(command_argv[0], command_argv);
         perror("execvp");
         _exit(127);
     }
@@ -86,10 +91,14 @@ int main(int argc, char *argv[])
         return EXIT_FAILURE;
     }
 
-    report_elapsed_time(start);
+    int timing_result = report_elapsed_time(start);
 
     if (munmap(start, sizeof(*start)) == -1) {
         perror("munmap");
+        return EXIT_FAILURE;
+    }
+
+    if (timing_result == -1) {
         return EXIT_FAILURE;
     }
 
