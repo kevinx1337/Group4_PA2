@@ -5,6 +5,25 @@
 #include <sys/wait.h>
 #include <sys/time.h>
 
+/* Measures and prints the elapsed time from the child's start timestamp. */
+static void report_elapsed_time(const struct timeval *start)
+{
+  struct timeval end;
+
+  if (start->tv_sec < 0) {
+    return;
+  }
+
+  if (gettimeofday(&end, NULL) == -1) {
+    perror("gettimeofday");
+    return;
+  }
+
+  double elapsed = (double)(end.tv_sec - start->tv_sec) +
+                  (double)(end.tv_usec - start->tv_usec) / 1000000.0;
+  printf("Elapsed time: %.6f seconds\n", elapsed);
+}
+
 int main(int argc, char *argv[]){
 
 /*person 3 validate command line arg
