@@ -1,0 +1,18 @@
+README.md
+time_pipe
+time_pipe.c
+time_shm
+time_shm_output.txt
+time_shm.c
+Elapsed time: 0.002717 seconds
+total 176
+-rw-r--r--@ 1 erikelizarraras  staff   1209 Oct  4 22:21 README.md
+-rwxr-xr-x@ 1 erikelizarraras  staff  34168 Oct  4 22:28 time_pipe
+-rw-r--r--@ 1 erikelizarraras  staff   3153 Oct  4 22:21 time_pipe.c
+-rwxr-xr-x@ 1 erikelizarraras  staff  33960 Oct  4 22:28 time_shm
+-rw-r--r--@ 1 erikelizarraras  staff    103 Oct  4 22:31 time_shm_output.txt
+-rw-r--r--@ 1 erikelizarraras  staff   2838 Oct  4 22:21 time_shm.c
+Elapsed time: 0.014675 seconds
+/Users/erikelizarraras/Documents/Group4_PA2
+Elapsed time: 0.002435 seconds
+Elapsed time: 1.008797 seconds
